@@ -77,7 +77,6 @@ def download_kernel_source_code(version, path):
     """
     Download Linux kernel source code for a specific version.
     """
-    logger.debug(f"Downloading {version} kernel source code")
     # get middle dir from SC_DESC_FILE
     with open(SC_DESC_FILE, "r") as f:
         version_manifest = yaml.safe_load(f)
@@ -91,15 +90,22 @@ def download_kernel_source_code(version, path):
         middle_dir = "v" + version.split(".")[0] + ".x"
     filename = "linux-" + version + ".tar.gz"
     url = f"{KERNEL_SOURCE_CODE_BASE_URL}/{middle_dir}/{filename}"
-    status = download_file(url, f"{path}/{filename}")
+    full_path = f"{path}/{filename}"
+    # Check if the expected kernel directory already exists
+    if os.path.exists(expected_kernel_dir):
+        logger.info(f"Kernel source code for {version} already exists at {expected_kernel_dir}. Skipping download.")
+        status = True 
+    else:
+        logger.debug(f"Downloading {version} kernel source code")
+        status = download_file(url, full_path)
     if status:
         logger.debug("Decompressing kernel source code")
         # decompress source code into 'kernel' dir
-        with tarfile.open(f"{path}/{filename}", "r:gz") as tar:
+        with tarfile.open(full_path, "r:gz") as tar:
             tar.extractall(path=path)
         os.rename(f"{path}/linux-{version}", f"{path}/{ENV_KERNEL_SUBDIR}")
-        # delete tar.gz file
-        os.remove(f"{path}/{filename}")
+        # instead: keep tar.gz file
+        # os.remove(f"{path}/{filename}")
     else:
         logger.error(f"Failed to download kernel source code for {version}")
         sys.exit(-1)
