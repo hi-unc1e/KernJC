@@ -90,7 +90,7 @@ def download_kernel_source_code(version, path):
         middle_dir = "v" + version.split(".")[0] + ".x"
     filename = "linux-" + version + ".tar.gz"
     url = f"{KERNEL_SOURCE_CODE_BASE_URL}/{middle_dir}/{filename}"
-    full_path = f"{path}/{filename}"
+    full_path = f"/tmp/{filename}"
     # Check if the expected kernel directory already exists
     if os.path.exists(full_path):
         logger.info(f"Kernel source code for {version} already exists at {full_path}. Skipping download.")
