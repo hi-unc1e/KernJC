@@ -52,6 +52,10 @@ def download_file(url, save_path):
     progress_bar.close()
     
     if total_size_in_bytes != 0 and progress_bar.n != total_size_in_mb:
+        # delete uncomplete file
+        import os
+        os.remove(save_path)
+        
         return False
 
     return True
