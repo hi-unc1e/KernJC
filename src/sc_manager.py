@@ -92,8 +92,8 @@ def download_kernel_source_code(version, path):
     url = f"{KERNEL_SOURCE_CODE_BASE_URL}/{middle_dir}/{filename}"
     full_path = f"{path}/{filename}"
     # Check if the expected kernel directory already exists
-    if os.path.exists(expected_kernel_dir):
-        logger.info(f"Kernel source code for {version} already exists at {expected_kernel_dir}. Skipping download.")
+    if os.path.exists(full_path):
+        logger.info(f"Kernel source code for {version} already exists at {full_path}. Skipping download.")
         status = True 
     else:
         logger.debug(f"Downloading {version} kernel source code")
