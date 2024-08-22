@@ -6,6 +6,16 @@
 
 set -eux
 
+# 检查目录，必须在 tools 目录下才允许执行
+current_dir_name=$(basename $(pwd))
+
+if [[ "$current_dir_name" == *tools* ]]; then
+    echo "当前目录名称为 '$current_dir_name'，包含 "tools"，继续执行脚本。"
+else
+    echo "当前目录名称为 '$current_dir_name'，不包含 "tools"，脚本将退出。"
+    exit 1
+fi
+
 # Create a minimal Debian distribution in a directory.
 DIR=chroot
 PREINSTALL_PKGS=openssh-server,curl,tar,gcc,libc6-dev,time,strace,sudo,less,psmisc,selinux-utils,policycoreutils,checkpolicy,selinux-policy-default,firmware-atheros,debian-ports-archive-keyring
