@@ -163,8 +163,7 @@ if [ $FOREIGN = "true" ]; then
     sudo cp $(which qemu-$ARCH-static) $DIR/$(which qemu-$ARCH-static)
     sudo chroot $DIR /bin/bash -c "/debootstrap/debootstrap --second-stage"
 fi
-
-# Set some defaults and enable promtless ssh to the machine for root.
+# Set some defaults and enable promptless ssh to the machine for root.
 sudo sed -i '/^root/ { s/:x:/:$1$neo$\/F2Y7huKmRxVN96gSTDe0.:/ }' $DIR/etc/passwd
 echo 'T0:23:respawn:/sbin/getty -L ttyS0 115200 vt100' | sudo tee -a $DIR/etc/inittab
 printf '\nauto eth0\niface eth0 inet dhcp\n' | sudo tee -a $DIR/etc/network/interfaces
@@ -174,7 +173,7 @@ echo 'securityfs /sys/kernel/security securityfs defaults 0 0' | sudo tee -a $DI
 echo 'configfs /sys/kernel/config/ configfs defaults 0 0' | sudo tee -a $DIR/etc/fstab
 echo 'binfmt_misc /proc/sys/fs/binfmt_misc binfmt_misc defaults 0 0' | sudo tee -a $DIR/etc/fstab
 echo -en "127.0.0.1\tlocalhost\n" | sudo tee $DIR/etc/hosts
-echo "nameserver 8.8.8.8" | sudo tee -a $DIR/etc/resolve.conf
+echo "nameserver 8.8.8.8" | sudo tee -a $DIR/etc/resolv.conf
 ssh-keygen -f $RELEASE.id_rsa -t rsa -N ''
 sudo mkdir -p $DIR/root/.ssh/
 cat $RELEASE.id_rsa.pub | sudo tee $DIR/root/.ssh/authorized_keys
